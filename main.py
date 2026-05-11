@@ -1,36 +1,22 @@
-# 配置好同级文件夹下.env中的大模型API, 可参考code文件夹配套的.env.example，也可以拿前几章的案例的.env文件复用。
-from hello_agents import SimpleAgent, HelloAgentsLLM
+# my_main.py
 from dotenv import load_dotenv
+from my_llm import MyLLM # 注意:这里导入我们自己的类
 
 # 加载环境变量
 load_dotenv()
 
-# 创建LLM实例 - 框架自动检测provider
-llm = HelloAgentsLLM()
+# 实例化我们重写的客户端，并指定provider
+llm = MyLLM(provider="modelscope") 
 
-# 或手动指定provider（可选）
-# llm = HelloAgentsLLM(provider="modelscope")
+# 准备消息
+messages = [{"role": "user", "content": "你好，请介绍一下你自己。"}]
 
-# 创建SimpleAgent
-agent = SimpleAgent(
-    name="AI助手",
-    llm=llm,
-    system_prompt="你是一个有用的AI助手"
-)
+# 发起调用，think等方法都已从父类继承，无需重写
+response_stream = llm.think(messages)
 
-# 基础对话
-response = agent.run("你好！请介绍一下自己")
-print(response)
-
-# 添加工具功能（可选）
-from hello_agents.tools import CalculatorTool
-calculator = CalculatorTool()
-# 需要实现7.4.1的MySimpleAgent进行调用，后续章节会支持此类调用方式
-# agent.add_tool(calculator)
-
-# 现在可以使用工具了
-response = agent.run("请帮我计算 2 + 3 * 4")
-print(response)
-
-# 查看对话历史
-print(f"历史消息数: {len(agent.get_history())}")
+# 打印响应
+print("ModelScope Response:")
+for chunk in response_stream:
+    # chunk在my_llm库中已经打印过一遍，这里只需要pass即可
+    # print(chunk, end="", flush=True)
+    pass
