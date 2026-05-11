@@ -1,3 +1,10 @@
+# my_llm.py
+import os
+from typing import Optional
+from openai import OpenAI
+from hello_agents import HelloAgentsLLM
+
+
 class MyLLM(HelloAgentsLLM):
     def __init__(
         self,
@@ -21,7 +28,7 @@ class MyLLM(HelloAgentsLLM):
                 raise ValueError("ModelScope API key not found. Please set MODELSCOPE_API_KEY environment variable.")
 
             # 设置默认模型和其他参数
-            self.model = model or os.getenv("LLM_MODEL_ID") or "Qwen/Qwen2.5-VL-72B-Instruct"
+            self.model = model or os.getenv("LLM_MODEL_ID") or "Qwen/Qwen3.5-35B-A3B"
             self.temperature = kwargs.get('temperature', 0.7)
             self.max_tokens = kwargs.get('max_tokens')
             self.timeout = kwargs.get('timeout', 60)
