@@ -166,7 +166,7 @@ class OpenAIAdapter(BaseLLMAdapter):
             self._client = self.create_client()
         
         start_time = time.time()
-        
+        kwargs['temperature'] = float(0.7)
         try:
             response = self._client.chat.completions.create(
                 model=self.model,
